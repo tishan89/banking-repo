@@ -1,0 +1,259 @@
+openapi: 3.0.0
+info:
+  title: Investment Banking API
+  version: 1.0.0
+  description: API for managing investment banking clients and savings accounts.
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /clients:
+    get:
+      summary: List all clients
+      parameters:
+        - in: query
+          name: minInvestment
+          required: false
+          schema:
+            type: number
+            format: double
+          description: Minimum total investment to filter clients
+        - in: query
+          name: maxInvestment
+          required: false
+          schema:
+            type: number
+            format: double
+          description: Maximum total investment to filter clients
+      responses:
+        '200':
+          description: A list of clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+    post:
+      summary: Create a new client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreate'
+      responses:
+        '201':
+          description: Client created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+  /clients/{clientId}:
+    get:
+      summary: Get a client by ID
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Client details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '404':
+          description: Client not found
+    put:
+      summary: Update a client
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientUpdate'
+      responses:
+        '200':
+          description: Client updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+    delete:
+      summary: Delete a client
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Client deleted
+  /accounts:
+    get:
+      summary: List all savings accounts
+      responses:
+        '200':
+          description: A list of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+    post:
+      summary: Create a new savings account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreate'
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /accounts/{accountId}:
+    get:
+      summary: Get a savings account by ID
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Account not found
+    put:
+      summary: Update a savings account
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdate'
+      responses:
+        '200':
+          description: Account updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    delete:
+      summary: Delete a savings account
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Account deleted
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        totalInvestment:
+          type: number
+          format: double
+      required:
+        - id
+        - name
+        - email
+        - totalInvestment
+    ClientCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        totalInvestment:
+          type: number
+          format: double
+      required:
+        - name
+        - email
+        - totalInvestment
+    ClientUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        totalInvestment:
+          type: number
+          format: double
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+        clientId:
+          type: string
+        accountNumber:
+          type: string
+        balance:
+          type: number
+          format: double
+      required:
+        - id
+        - clientId
+        - accountNumber
+        - balance
+    AccountCreate:
+      type: object
+      properties:
+        clientId:
+          type: string
+        accountNumber:
+          type: string
+        balance:
+          type: number
+          format: double
+      required:
+        - clientId
+        - accountNumber
+        - balance
+    AccountUpdate:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        balance:
+          type: number
+          format: double 

@@ -1,0 +1,15 @@
+componentType: Service
+name: investment-backend
+projectName: investment-banking
+organization: your-org-name
+source:
+  type: Local
+  path: ../investment-backend
+build:
+  command: go build -o investment-backend main.go
+run:
+  command: ./investment-backend
+networkVisibility:
+  organization: true
+  project: true
+  public: false 
