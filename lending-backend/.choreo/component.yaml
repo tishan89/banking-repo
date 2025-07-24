@@ -1,0 +1,13 @@
+schemaVersion: "1.2"
+
+endpoints:
+  - name: lending-banking-backend
+    displayName: Lending Banking Backend
+    service:
+      basePath: /
+      port: 8080
+    type: REST
+    networkVisibilities:
+      - Public
+      - Organization
+    schemaFilePath: openapi.yaml 

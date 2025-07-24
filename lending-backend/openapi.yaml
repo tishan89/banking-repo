@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: Lending Account API
+  version: 1.0.0
+  description: API for managing lending account details.
+servers:
+  - url: http://localhost:8080
+paths:
+  /lending-clients:
+    get:
+      summary: List lending clients
+      parameters:
+        - in: query
+          name: minLend
+          schema:
+            type: number
+          required: false
+          description: Minimum lending value
+        - in: query
+          name: maxLend
+          schema:
+            type: number
+          required: false
+          description: Maximum lending value
+      responses:
+        '200':
+          description: List of lending clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LendingClient'
+    post:
+      summary: Create a new lending client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LendingClient'
+      responses:
+        '201':
+          description: Lending client created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LendingClient'
+  /lending-clients/{id}:
+    get:
+      summary: Get lending client by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lending client details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LendingClient'
+        '404':
+          description: Client not found
+    put:
+      summary: Update lending client by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LendingClient'
+      responses:
+        '200':
+          description: Lending client updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LendingClient'
+        '404':
+          description: Client not found
+    delete:
+      summary: Delete lending client by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Lending client deleted
+        '404':
+          description: Client not found
+components:
+  schemas:
+    LendingClient:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        totalLend:
+          type: number
+          format: float
+      required:
+        - id
+        - name
+        - email
+        - totalLend 
