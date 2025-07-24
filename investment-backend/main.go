@@ -282,7 +282,14 @@ func deleteClientHandler(store ClientStore) http.HandlerFunc {
 func main() {
 	store := NewCSVClientStore("portfolio.csv")
 
-	http.HandleFunc("/clients", getClientsHandler(store))
+	http.HandleFunc("/clients", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			createClientHandler(store)(w, r)
+			return
+		}
+		getClientsHandler(store)(w, r)
+	})
+
 	http.HandleFunc("/clients/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
@@ -292,13 +299,6 @@ func main() {
 		case http.MethodDelete:
 			deleteClientHandler(store)(w, r)
 		}
-	})
-	http.HandleFunc("/clients", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			createClientHandler(store)(w, r)
-			return
-		}
-		getClientsHandler(store)(w, r)
 	})
 
 	fmt.Println("Server running on :8080")
